@@ -1,0 +1,22 @@
+Package: WEMo
+Title: Wave Energy Model
+Version: 0.0.0.9000
+Authors@R: 
+    person("Quentin", "Walker", , "quetin.walker@noaa.gov", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-1375-822X"))
+Description: WEMo is a model that quantifies the energetic environment of a given point resulting from wind-generated waves. The model takes as inputs a bathymetry, a shoreline polygon, and wind history data. This packages contains functions to calculate the fetch, determine the effective fetch, grab the bathymetery along a vector ray and then build a wind-wave.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: 
+    ggplot2,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    dplyr,
+    magrittr,
+    sf,
+    sp,
+    stringr,
+    terra
