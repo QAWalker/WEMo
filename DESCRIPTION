@@ -20,3 +20,5 @@ Imports:
     sp,
     stringr,
     terra
+URL: https://github.com/QAWalker/WEMo
+BugReports: https://github.com/QAWalker/WEMo/issues
