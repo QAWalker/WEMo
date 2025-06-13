@@ -22,3 +22,6 @@ Imports:
     terra
 URL: https://github.com/QAWalker/WEMo
 BugReports: https://github.com/QAWalker/WEMo/issues
+Depends: 
+    R (>= 3.5)
+LazyData: true
