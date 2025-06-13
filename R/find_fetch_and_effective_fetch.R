@@ -3,5 +3,5 @@ find_fetch_and_effective_fetch <- function(points, shoreline, directions = list(
 
   eff_fetch <- effective_fetch(fetch = fetch)
 
-  return(effective_fetch)
+  return(eff_fetch)
 }
