@@ -105,7 +105,7 @@ get_wind_data <- function(site_point, years, which_station = 'ask') {
                              paste0(" [missing years: ", .data$gap_string, "]"))
         )
 
-      inventory <- dplyr::right_join(station, inventory, by = dplyr::join_by(id)) %>%
+      inventory <- dplyr::right_join(station, inventory, by = dplyr::join_by(.data$id)) %>%
         dplyr::arrange(.data$distance)
 
       worldmet::import_ghcn_stations(lat = LAT, lng = LON, crs = sf::st_crs(site_point), n_max = 5, return = 'map')

@@ -63,7 +63,7 @@ The function `generate_shoreline_from_bathy()` generates a shoreline polygon at 
 
 WEMo is a local wind-wave only model, other sources of waves like tides and seiche are not considered. 
 
-The function `get_wind_data()` gives users access to [NOAA’s integrated surface dataset](https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database) (via the [worldmet](https://openair-project.github.io/worldmet/) package) to retrieve wind data for use in WEMo. Users can select a station, either interactively or by providing an index or station code.
+The function `get_wind_data()` gives users access to [NOAA’s The Global Historical Climatology Network hourly (GHCNh) dataset](https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly) (via the [worldmet](https://openair-project.github.io/worldmet/) package) to retrieve wind data for use in WEMo. Users can select a station, either interactively or by providing an index or station code.
 
 The function `summarize_wind_data()` prepares wind data to be used by WEMo by cleaning and summarizing data from `get_wind_data()`.
 
