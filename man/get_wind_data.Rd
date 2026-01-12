@@ -10,7 +10,7 @@ get_wind_data(site_point, years, which_station = "ask")
 \item{site_point}{A spatial point object (either \code{sf} or coercible to \code{sf})
 indicating the target location.}
 
-\item{years}{A vector of years (e.g., 2002:2024) for which to download wind
+\item{years}{A vector of years (e.g., \code{2002:2024}) for which to download wind
 data.}
 
 \item{which_station}{Either:
@@ -25,12 +25,18 @@ A data frame with cleaned wind direction and wind speed, along with
 station code, timestamp, and date components (year, month, day).
 }
 \description{
-This function is a wrapper around the \link[worldmet:getMeta]{\code{getMeta()}}
-and \link[worldmet:importNOAA]{\code{importNOAA()}} functions from the
-\strong{\link[worldmet]{worldmet}} package. It finds up to 5 nearby NOAA weather stations based
-on a geographic point, allows the user to select a station (interactively or
-by index/code), and downloads wind direction and speed data for specified
-years.
+This function is a wrapper around a workflow to find and download wind data
+using the \link[worldmet:import_ghcn_stations]{import_ghcn_stations()} and
+\link[worldmet:import_ghcn_hourly]{import_ghcn_hourly()} functions from the
+\strong{worldmet} package. It finds up to 5 nearby NOAA GHCN weather stations based
+on a geographic point and downloads hourly wind data.
+}
+\details{
+This function utilizes data from \strong{Global Historical Climatology
+Network (GHCN)} dataset. GHCN aggregates hourly meteorological
+observations from numerous fixed, land-based stations. maintained by NOAA,
+the U.S. Air Force, and many other meteorological agencies (Met Services)
+around the world.
 }
 \examples{
 # Create a POINT geometry from coordinates and cast explicitly
@@ -63,8 +69,13 @@ wind_data_index <- get_wind_data(
 wind_data_manual <- get_wind_data(
   site_point = NULL,
   years = 2022:2023,
-  which_station = "723037-93765"
+  which_station = "USW00093765"
  )
 }
 
+}
+\references{
+For more information on the GHCN and to view an interactive
+map of stations, see
+https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly
 }
