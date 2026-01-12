@@ -1,6 +1,6 @@
 Package: WEMo
 Title: Wave Energy Model
-Version: 0.0.0.9000
+Version: 0.0.0.9100
 Authors@R: 
     person("Quentin", "Walker", , "quetin.walker@noaa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1375-822X"))
@@ -28,7 +28,9 @@ Imports:
     terra,
     tibble,
     tidyterra,
-    worldmet
+    worldmet (>= 0.10.2.9000)
+Remotes: 
+    openair-project/worldmet
 URL: https://github.com/MSE-NCCOS-NOAA/WEMo
 BugReports: https://github.com/MSE-NCCOS-NOAA/WEMo/issues
 Depends: 

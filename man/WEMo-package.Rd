@@ -13,9 +13,8 @@ WEMo is a model for quantifying the wave energy environment at a given location 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/QAWalker/WEMo}
-  \item \url{https://qawalker.github.io/WEMo/}
-  \item Report bugs at \url{https://github.com/QAWalker/WEMo/issues}
+  \item \url{https://github.com/MSE-NCCOS-NOAA/WEMo}
+  \item Report bugs at \url{https://github.com/MSE-NCCOS-NOAA/WEMo/issues}
 }
 
 }

@@ -1,15 +1,20 @@
 #' Retrieve and clean wind data for WEMo
 #'
-#' This function is a wrapper around the \link[worldmet:getMeta]{`getMeta()`}
-#' and \link[worldmet:importNOAA]{`importNOAA()`} functions from the
-#' **\link[worldmet]{worldmet}** package. It finds up to 5 nearby NOAA weather stations based
-#' on a geographic point, allows the user to select a station (interactively or
-#' by index/code), and downloads wind direction and speed data for specified
-#' years.
+#' This function is a wrapper around a workflow to find and download wind data
+#' using the \link[worldmet:import_ghcn_stations]{import_ghcn_stations()} and
+#' \link[worldmet:import_ghcn_hourly]{import_ghcn_hourly()} functions from the
+#' **worldmet** package. It finds up to 5 nearby NOAA GHCN weather stations based
+#' on a geographic point and downloads hourly wind data.
+#'
+#' @details This function utilizes data from **Global Historical Climatology
+#'   Network (GHCN)** dataset. GHCN aggregates hourly meteorological
+#'   observations from numerous fixed, land-based stations. maintained by NOAA,
+#'   the U.S. Air Force, and many other meteorological agencies (Met Services)
+#'   around the world.
 #'
 #' @param site_point A spatial point object (either `sf` or coercible to `sf`)
 #'   indicating the target location.
-#' @param years A vector of years (e.g., 2002:2024) for which to download wind
+#' @param years A vector of years (e.g., `2002:2024`) for which to download wind
 #'   data.
 #' @param which_station Either:
 #'   - `"ask"`: interactively choose from 5 closest stations;
@@ -50,9 +55,13 @@
 #' wind_data_manual <- get_wind_data(
 #'   site_point = NULL,
 #'   years = 2022:2023,
-#'   which_station = "723037-93765"
+#'   which_station = "USW00093765"
 #'  )
 #' }
+#'
+#' @references For more information on the GHCN and to view an interactive
+#'   map of stations, see
+#'   https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly
 #'
 #' @export
 get_wind_data <- function(site_point, years, which_station = 'ask') {
@@ -70,79 +79,89 @@ get_wind_data <- function(site_point, years, which_station = 'ask') {
       })
     }
 
-    # Reproject to WGS84 for compatibility with worldmet
-    target_crs <- sf::st_crs("EPSG:4326")
-    if (sf::st_crs(site_point) != target_crs) {
-      site_point <- sf::st_transform(site_point, target_crs)
-    }
-
     # Extract latitude and longitude
     LAT <- sf::st_coordinates(site_point)[[1,2]]
     LON <- sf::st_coordinates(site_point)[[1,1]]
 
-    # make sure that the NOAA web service hosting the metadata is working and return suggestion on how to fix if not
-    station <- tryCatch({
-      worldmet::getMeta(lat = LAT, lon = LON, n = 5, plot = (which_station == "ask"))
-    }, error = function(e) {
-      stop(
-        "\nERROR: Could not connect to the NOAA metadata server.\n",
-        "This usually happens when NOAA servers are down or you have network/VPN issues.\n\n",
-        "WORKAROUND: Please look up the USAF-WBAN code manually and pass it to 'which_station'.\n",
-        "Example: get_wind_data(site_point = NULL, years = 2022, which_station = '723037-93765')",
-        call. = FALSE
-      )
-    })
-    # ---------------------------------------
+    station <- worldmet::import_ghcn_stations(lat = LAT, lng = LON, crs = sf::st_crs(site_point), n_max = 5, return = 'table')
 
     if(which_station == "ask"){
-      # Display options for user to choose from
+      inventory_raw <- worldmet::import_ghcn_inventory(database = 'hourly')
+
+      inventory <- inventory_raw %>%
+        dplyr::filter(.data$id %in% station$id) %>%
+        dplyr::group_by(.data$id) %>%
+        dplyr::summarize(
+          start_year = min(.data$year, na.rm = TRUE),
+          end_year = max(.data$year, na.rm = TRUE),
+          # Use the helper to get the ranges or an empty string
+          gap_string = summarize_years(setdiff(min(.data$year):max(.data$year), .data$year)),
+          .groups = "drop"
+        ) %>%
+        # Join back to get names/dist if needed, then:
+        dplyr::mutate(
+          gap_label = ifelse(.data$gap_string == "",
+                             "",
+                             paste0(" [missing years: ", .data$gap_string, "]"))
+        )
+
+      inventory <- dplyr::right_join(station, inventory, by = dplyr::join_by(.data$id)) %>%
+        dplyr::arrange(.data$distance)
+
+      worldmet::import_ghcn_stations(lat = LAT, lng = LON, crs = sf::st_crs(site_point), n_max = 5, return = 'map')
+    }
+
+    if(which_station == "ask"){
+
+      # Build the display options
       options <- paste0(
-        station$usaf, '-', station$wban, " ",station$station, " (", round(station$dist, 1), " km), ",
-        station$begin, " to ", station$end
+        inventory$id, " ", inventory$name,
+        " (", round(inventory$distance, 1), " km), ",
+        inventory$start_year, " to ", inventory$end_year,
+        inventory$gap_label
       )
 
       # Prompt user
-      cat("Choose a met station\n")
+      cat("Choose a GHCN station or enter blank to cancel\n")
       selection <- utils::menu(options, title = "Available stations:")
 
       # Handle cancel
       if (!(selection %in% c(1:5))) stop("invalid station selected.")
     }else{
-      # Get metadata for the 5 closest NOAA stations
-      station <- worldmet::getMeta(lat = LAT, lon = LON, n = 5, plot = F)
       # Use specified index (1-5) without prompt
       cat(
-        "Using Met station",
-        which_station,
-        paste(station$usaf[which_station], station$wban[which_station], sep = '-'),
-        paste0(
-          station$station[which_station],
-          " (",
-          round(station$dist[which_station], 1),
-          " km), ",
-          station$begin[which_station],
-          " to ",
-          station$end[which_station]
-        ),
-        "\n"
+        "Using ", which_station, c("st", "nd", "rd", "th", "th")[which_station], " closest GHCN station",
+        "\nstation: ", station$id[which_station], " ", station$name[which_station],
+        ", (", station$lat[which_station], ", ", station$lng[which_station], "), ", round(station$distance[which_station], 1), " km from site_point\n",
+        sep = ""
       )
       selection <- which_station
     }
     # Construct the NOAA station code (e.g., "723037-93765")
-    station_code <- paste(station$usaf[selection], station$wban[selection], sep = '-')
+    station_code <- station$id[selection]
   } else {
     # If user directly passed a station code, use it as-is
     station_code <- as.character(which_station)
   }
 
   # Download NOAA met data for the specified years
-  met_data <- worldmet::importNOAA(code = station_code, year = years)
+  met_data <- worldmet::import_ghcn_hourly(station = station_code, year = years, append_codes = FALSE)
+
+  # check if returned met data is blank
+  if (is.null(met_data) || nrow(met_data) == 0) {
+    message(
+      "\nNo data found for station '", station_code, "' in year(s): ",
+      paste(years, collapse = ", "),
+      "\nPlease try a different station or a different year range."
+    )
+    return(NULL)
+  }
 
   # Clean and restructure the data
   wind <- met_data %>%
-    dplyr::mutate(id = .data$code,
+    dplyr::mutate(id = .data$station_id,
            time = (.data$date), .before = 0) %>%
-    dplyr::select(.data$code, .data$time, wind_direction = .data$wd, wind_speed = .data$ws) %>%
+    dplyr::select("station_id", "time", wind_direction = "wd", wind_speed = "ws") %>%
     dplyr::mutate(
       year = lubridate::year(.data$time),
       month = lubridate::month(.data$time),
@@ -150,10 +169,27 @@ get_wind_data <- function(site_point, years, which_station = 'ask') {
       .before = 3
     )
 
-  # wind <- wind %>%
-  #   mutate(wind_direction = round(wind_direction/(360/36), 0)*(360/36)) %>%
-  #   filter()
 
   return(wind)
 }
 
+#' Summarize a vector of years into ranges
+#'
+#' Internal helper to convert a numeric vector of years into a
+#' human-readable string of ranges (e.g., "2000-2005, 2010").
+#'
+#' @param years A numeric vector of years.
+#' @return A character string. Returns "" if the input is empty.
+#' @noRd
+summarize_years <- function(years) {
+  if (length(years) == 0) return("") # Return blank for no gaps
+
+  years <- sort(unique(years))
+  groups <- cumsum(c(1, diff(years) != 1))
+
+  out <- tapply(years, groups, function(x) {
+    if (length(x) > 1) paste0(min(x), "-", max(x)) else as.character(x)
+  })
+
+  return(paste(out, collapse = ", "))
+}
