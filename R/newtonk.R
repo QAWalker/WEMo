@@ -16,6 +16,7 @@
 #' The method terminates if the relative change in successive estimates is below `1e-6`
 #' or after 20 iterations.
 #'
+#'@keywords internal
 newtonk <- function(h, ko) {
   eps <- 1e-6
 

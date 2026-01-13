@@ -20,6 +20,7 @@
 #'
 #' # North on a compass is ALSO 360 deg
 #' compassDegrees_to_radianDegrees(360)
+#' @keywords internal
 compassDegrees_to_radianDegrees <- function(compassDegrees){
   (450 - compassDegrees) %% 360
 }
