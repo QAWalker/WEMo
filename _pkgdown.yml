@@ -1,0 +1,30 @@
+url: https://mse-nccos-noaa.github.io/WEMo/
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [github]
+  components:
+    articles:
+      text: Tutorials
+      menu:
+        - text: "Core Workflow"
+        - text: "1. Getting Started"
+          href: articles/getting-started.html
+        - text: "2. Gathering Input Data"
+          href: articles/gathering-inputs.html
+
+reference:
+  - title: Core Modeling Functions
+    contents:
+      - wemo_full
+      - wemo
+      - prepare_wemo_inputs
+  - title: Data Acquisition & Prep
+    contents:
+      - get_wind_data
+      - get_noaa_cudem
+      - summarize_wind_data
+      - plot_wind_rose
