@@ -31,7 +31,7 @@ Imports:
     worldmet (>= 0.10.2.9000)
 Remotes: 
     openair-project/worldmet
-URL: https://github.com/MSE-NCCOS-NOAA/WEMo
+URL: https://github.com/MSE-NCCOS-NOAA/WEMo, https://mse-nccos-noaa.github.io/WEMo/
 BugReports: https://github.com/MSE-NCCOS-NOAA/WEMo/issues
 Depends: 
     R (>= 3.5)
