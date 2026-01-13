@@ -14,6 +14,7 @@ WEMo is a model for quantifying the wave energy environment at a given location 
 Useful links:
 \itemize{
   \item \url{https://github.com/MSE-NCCOS-NOAA/WEMo}
+  \item \url{https://mse-nccos-noaa.github.io/WEMo/}
   \item Report bugs at \url{https://github.com/MSE-NCCOS-NOAA/WEMo/issues}
 }
 

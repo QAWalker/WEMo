@@ -26,3 +26,4 @@ and refined to yield a more accurate wave number accounting for finite depth.
 The method terminates if the relative change in successive estimates is below \code{1e-6}
 or after 20 iterations.
 }
+\keyword{internal}

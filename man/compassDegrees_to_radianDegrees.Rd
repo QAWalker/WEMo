@@ -31,3 +31,4 @@ compassDegrees_to_radianDegrees(270)
 # North on a compass is ALSO 360 deg
 compassDegrees_to_radianDegrees(360)
 }
+\keyword{internal}
