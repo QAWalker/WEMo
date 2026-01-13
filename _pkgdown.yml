@@ -21,10 +21,22 @@ reference:
     contents:
       - wemo_full
       - wemo
-      - prepare_wemo_inputs
-  - title: Data Acquisition & Prep
+      - build_wind_wave
+      - find_fetch
+      - effective_fetch
+      - update_depths
+  - title: Gathering and Preparing Input Data
     contents:
       - get_wind_data
-      - get_noaa_cudem
       - summarize_wind_data
       - plot_wind_rose
+      - map_noaa_cudem
+      - get_noaa_cudem
+      - generate_grid_points
+      - generate_shoreline_from_bathy
+      - prepare_wemo_inputs
+  - title: Example Datasets
+    contents:
+      - PI_points
+      - PI_shoreline
+      - PI_wind_data
