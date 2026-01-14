@@ -113,7 +113,7 @@ A suite of example data is included with WEMo. The data are from the area around
 
 This raster should cover the full extent of the area that you might expect to be reached by fetch rays from your site. 
 
-```{r read bathy data for show, eval = FALSE}
+```{r read-bathy-data-for-show, eval = FALSE, fig.alt="Map showing the bathy raster"}
 # load bathymetry
 PI_bathy <- terra::rast(x = system.file("extdata", "PI_bathy.tif", package = "WEMo"))
 
@@ -124,15 +124,13 @@ ggplot() +
 ```
 
 
-```{r bathy-path-hidden, echo = FALSE}
+```{r bathy-path-hidden, incldue = F, fig.alt = "Map showing Bathymetric raster"}
 bathy_path <- system.file("extdata", "PI_bathy.tif", package = "WEMo")
 
-if (bathy_path == "") {
-  # This ensures the build works on GitHub Actions
-  bathy_path <- list.files(path = "../..", pattern = "PI_bathy.tif", recursive = TRUE, full.names = TRUE)
-  
-  # If we found multiple, just take the first one
-  if(length(bathy_path) > 1) bathy_path <- bathy_path[1]
+if (bathy_path == "" || !file.exists(bathy_path)) {
+  # We search from the project root (top level)
+  # This is more reliable than guessing with "../../"
+  bathy_path <- pkgload::package_file("inst", "extdata", "PI_bathy.tif")
 }
 
 PI_bathy <- terra::rast(bathy_path)
@@ -145,7 +143,7 @@ ggplot() +
 
 ### Site Points
 
-```{r import and plot points}
+```{r import-and-plot-points, fig.alt="Map showing site points"}
 # Plot site points
 # PI_Points is a sf object containing 3 points
 ggplot()+
@@ -154,7 +152,7 @@ ggplot()+
 
 ### Shoreline
 
-```{r import and plot shoreline}
+```{r import-and-plot-shoreline, fig.alt="Map showing MHHW shoreline"}
 # Plot shoreline
 # PI_shoreline is a polygon representing the MHHW shoreline (0.552 m NAVD88)
 ggplot()+
@@ -163,7 +161,7 @@ ggplot()+
 
 ### Plot All Input Spatial Data
 
-```{r plot shoreline and points}
+```{r plot-shoreline-and-points, fig.alt="Map showing bathymetrey, shoreline, and points"}
 # plot all input spatial data
 ggplot()+
   geom_spatraster(data = PI_bathy)+
@@ -175,7 +173,7 @@ ggplot()+
 
 ### Wind
 
-```{r inspect example wind data, results='markup'}
+```{r inspect-example-wind-data, results='markup'}
 # View first several rows of wind data
 # PI_wind_data contains local wind observations from 2023 - 2024
 head(PI_wind_data)
@@ -183,7 +181,7 @@ head(PI_wind_data)
 
 WEMo wants a summary of the wind history data i.e. one proportion and speed value for each direction.
 
-```{r summarize wind, eval = T}
+```{r summarize-wind, eval = T}
 # Summarizing wind data
 # create a vector from 0 to 350 by 10 to snap the input wind_directions to
 wanted_directions <- seq(from = 0, to = 350, by = 10)
@@ -202,7 +200,7 @@ head(wind_data_summary)
 
 Plot the summarized wind data as a wind rose:
 
-```{r plot summarized wind data in a wind rose, eval=TRUE}
+```{r plot-wind-rose, eval=TRUE, fig.alt="Wind Rose"}
 # Plot wind data summary as a wind rose
 wind_rose_plot <- plot_wind_rose(wind_data = wind_data_summary)
 
@@ -236,7 +234,7 @@ We also set a few modeling parameters:
 * `depths_or_elev = "elev"`: indicates that the bathymetry file stores elevations (not water depths).
 
 
-```{r run wemo, eval = TRUE}
+```{r run-wemo, eval = TRUE}
 wemo_output <- wemo_full(
   site_points = PI_points,
   shoreline = PI_shoreline,
@@ -252,13 +250,13 @@ wemo_output <- wemo_full(
 ```
 
 `wemo_full()` returns two objects
-```{r}
+```{r show-wemo_output}
 names(wemo_output)
 ```
 
 `wemo_final` contains the summary stats at each site
 
-```{r}
+```{r display-final-wemo-results, fig.alt="Map Showing the results of WEMo model"}
 wemo_output$wemo_final
 
 # wemo_output$wemo_final can be plotted with input data 
@@ -270,7 +268,7 @@ ggplot()+
 
 `wemo_details` contains stats about the waves from each fetch ray
 
-```{r}
+```{r display-wemo-details, fig.alt="Map waves modelled by WEMo for each fetch ray"}
 head(wemo_output$wemo_details)
 
 # wemo_output$wemo_details can be plotted with input data 
@@ -287,7 +285,7 @@ Most users will probably only want the data from `wemo_final`, but `wemo_details
 
 ## Saving Results
 
-```{r, eval=FALSE}
+```{r save-results, eval=FALSE}
 sf::st_write(wemo_output$wemo_details, "/path/to/save/wemo_details.shp")
 sf::st_write(wemo_output$wemo_final, "/path/to/save/wemo_final.shp")
 
@@ -319,13 +317,13 @@ inputs <- prepare_wemo_inputs(
 
 Then run the model:
 
-```{r}
+```{r show-wemo-results}
 results <- wemo(fetch = inputs)
 ```
 
 ## Example: Adding Sea Level Rise
 
-```{r add SLR to input data}
+```{r add-SLR-to-input-data}
 # add 0.3 m to each depth value
 inputs_SLR <- update_depths(inputs, depth_diff = 0.3)
 results_SLR <- wemo(inputs_SLR)
@@ -343,7 +341,7 @@ We see a slight increase in wave heights and RWE from raising sea level. Note we
 
 ## Example: Stronger Winds
 
-```{r run wemo on more windy data}
+```{r run-wemo-on-more-windy-data}
 # Create a copy of the inputs
 inputs_windy <- inputs
 # Increase wind speed by 25%
@@ -366,7 +364,7 @@ We see increases in wave heights up to 5 cm for max wave heights and 3.5 cm for 
 
 *this is a bit advanced, but a cool visual*
 
-```{r Comparing Results Senarios, fig.dim=c(9, 6)}
+```{r Comparing-Results-Senarios, fig.dim=c(9, 6), fig.alt="Map comparing WEMo results under different senarios"}
 # make a data set to combine all results
 results_all <- dplyr::bind_rows(
   dplyr::mutate(results$wemo_details, senario = "1. Normal"), 

@@ -7,7 +7,7 @@
 
 <!-- badges: start -->
 
-<img src="man/figures/logo.png" align="right" height="200" />
+<img src="man/figures/logo.png" align="right" style="height: 130px; margin-left: 15px; margin-bottom: 5px;" />
 <!-- badges: end -->
 
 ------------------------------------------------------------------------
@@ -110,7 +110,7 @@ ggplot() +
 #> <SpatRaster> resampled to 500556 cells.
 ```
 
-<img src="man/figures/README-examine_input_data-1.png" width="85%" />
+<img src="man/figures/README-examine_input_data-1.png" alt="Map showing input spatial data" width="85%" />
 
 ``` r
 # WEMo needs a summary of wind speed and proportion by direction
@@ -124,7 +124,7 @@ wind_summary <- summarize_wind_data(
 plot_wind_rose(wind_data = wind_summary)
 ```
 
-<img src="man/figures/README-summarize_and_plot_wind_data-1.png" width="85%" />
+<img src="man/figures/README-summarize_and_plot_wind_data-1.png" alt="Wind rose plot" width="85%" />
 
 ### 4. Run the full WEMo model
 
@@ -167,7 +167,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-plot_final_results-1.png" width="85%" />
+<img src="man/figures/README-plot_final_results-1.png" alt="Map of WEMo results" width="85%" />
 
 ``` r
 
@@ -181,7 +181,7 @@ ggplot() +
   theme_minimal()
 ```
 
-<img src="man/figures/README-plot_final_results-2.png" width="85%" />
+<img src="man/figures/README-plot_final_results-2.png" alt="Map of WEMo results" width="85%" />
 
 ## Gathering Your Own Data
 
@@ -201,8 +201,8 @@ necessary input for your area of interest
   `generate_grid_points()`.
 
 For a detailed, step-by-step tutorial on using these functions, please
-see the *“Gathering WEMo Data”* vignette by running
-`vignette("Gathering Input Data", package = "WEMo")`.
+see the [*“Gathering Input Data for WEMo”*
+article](https://github.com/MSE-NCCOS-NOAA/WEMo/blob/HEAD/vignettes/articles/gathering-inputs.Rmd).
 
 ## Citing WEMo
 
@@ -210,7 +210,7 @@ If you use WEMo in your research, please cite both the R package and the
 original publications that describe the model’s methodology.
 
 > Walker, Q.A. (2024). *WEMo: An R Implementation of the Wave Exposure
-> Model*. R package version X.X.X.
+> Model*. R package version 0.1.0.9000
 > <https://github.com/MSE-NCCOS-NOAA/WEMo>
 
 > Malhotra, A., & Fonseca, M. S. (2007). *WEMo (Wave Exposure Model):

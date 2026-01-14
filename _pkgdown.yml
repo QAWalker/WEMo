@@ -1,6 +1,9 @@
 url: https://mse-nccos-noaa.github.io/WEMo/
 template:
   bootstrap: 5
+  params:
+    logo:
+      height: 40px # This controls the tiny logo in the top-left navigation bar
 
 navbar:
   structure:
