@@ -23,6 +23,7 @@ Imports:
     leaflet,
     lubridate,
     magrittr,
+    remotes,
     rlang,
     sf,
     terra,
