@@ -7,7 +7,6 @@
 inst/doc
 bathymetry
 vignettes/NOAA_CUDEM/*
-*.tif
 WEMo_polygon.dbf
 WEMo_polygon.prj
 WEMo_polygon.shp

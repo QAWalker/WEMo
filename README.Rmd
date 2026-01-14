@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # WEMo
 ## An R Implementation of the Wave Exposure Model
 <!-- badges: start -->
-<img src="man/figures/logo.png" align="right" height="200" />
+<img src="man/figures/logo.png" align="right" style="height: 130px; margin-left: 15px; margin-bottom: 5px;" />
 <!-- badges: end -->
 
 ---
@@ -44,7 +44,7 @@ This package provides a modern, open-source, and accessible implementation of th
 
 You can install the development version of `WEMo` from [GitHub](https://github.com/) with:
 
-``` r
+``` {r display how to install package, eval=FALSE}
 # If you don't have the 'remotes' package, install it first
 # install.packages("remotes")
 
@@ -73,7 +73,7 @@ A suite of example data is included with WEMo. The data are from the area around
 * `PI_wind_data`: hourly wind history from a nearby weather station. A `tibble`.
 * `PI_bathy`: a topobathy raster storing elevations in m NAVD88. A `SpatRaster`,
 
-```{r examine_input_data}
+```{r examine_input_data, fig.alt="Map showing input spatial data"}
 # read in the topobathy
 PI_bathy <- terra::rast(x = system.file("extdata", "PI_bathy.tif", package = "WEMo"))
 
@@ -87,7 +87,7 @@ ggplot() +
   theme_minimal()
 ```
 
-```{r summarize_and_plot_wind_data}
+```{r summarize_and_plot_wind_data, fig.alt="Wind rose plot"}
 # WEMo needs a summary of wind speed and proportion by direction
 wind_summary <- summarize_wind_data(
   wind_data = PI_wind_data,
@@ -113,7 +113,7 @@ wemo_results <- wemo_full(
 
 ### 5. Examine and plot final results
 
-```{r plot_final_results}
+```{r plot_final_results, fig.alt="Map of WEMo results"}
 print(wemo_results$wemo_final)
 
 # Plot the average wave height at each point
@@ -148,13 +148,13 @@ WEMo provides several functions to help you acquire and prepare the necessary in
 
 * **Site Points**: Create a regular grid of points for analysis using `generate_grid_points()`.
 
-For a detailed, step-by-step tutorial on using these functions, please see the *"Gathering WEMo Data"* vignette by running `vignette("Gathering Input Data", package = "WEMo")`.
+For a detailed, step-by-step tutorial on using these functions, please see the [*"Gathering Input Data for WEMo"* article](https://github.com/MSE-NCCOS-NOAA/WEMo/blob/HEAD/vignettes/articles/gathering-inputs.Rmd).
 
 ## Citing WEMo
 
 If you use WEMo in your research, please cite both the R package and the original publications that describe the model's methodology.
 
-> Walker, Q.A. (2024). *WEMo: An R Implementation of the Wave Exposure Model*. R package version X.X.X. https://github.com/MSE-NCCOS-NOAA/WEMo
+> Walker, Q.A. (2024). *WEMo: An R Implementation of the Wave Exposure Model*. R package version 0.1.0.9000 https://github.com/MSE-NCCOS-NOAA/WEMo
 
 > Malhotra, A., & Fonseca, M. S. (2007). *WEMo (Wave Exposure Model): Formulation, Procedures and Validation*. NOAA Technical Memorandum NOS NCCOS 65. 28 pp.
 

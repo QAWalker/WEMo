@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # Overview
 
-Before running WEMo simulations, you must gather the necessary spatial and environmental input data. This vignette introduces the WEMo functions used to:
+Before running WEMo simulations, you must gather the necessary spatial and environmental input data. This article introduces the WEMo functions used to:
 
 * Download and clean wind history data
 * Download bathymetry data
@@ -57,7 +57,7 @@ library(tidyterra)
 
 To demonstrate the process of gathering and preparing data for WEMo, we'll collect data for an example analysis in Sinepuxent Bay near Assateague Island National Seashore, Maryland. 
 
-```{r create a site_point}
+```{r create-a-site_point}
 # create a point at an area of interest in Sinepuxent Bay Maryland
 site_point <- st_as_sf(
   data.frame(lon = -75.168008, lat = 38.223823),
@@ -71,7 +71,7 @@ site_point <- st_as_sf(
 
 Use `get_wind_data()` to retrieve and download wind observations from the NOAA Integrated Surface Database (ISD). The returned data frame includes timestamps, wind speed (m/s), and direction (degrees). 
 
-```{r download wind data, eval = T, warning=FALSE}
+```{r download-wind-data, eval = T, warning=FALSE}
 # download wind data from 2020 - 2023 from the closest station to our point
 wind_data <- get_wind_data(site_point, 2020:2023, which_station = 1)
 
@@ -83,7 +83,7 @@ The `which_station` variable indicates to download the data from the nth closest
 
 Setting `which_station` to `"ask"` provides a list and an interactive map of the 5 closest stations and allows you to choose which you'd like.
 
-```{r demo the ask function, eval = F}
+```{r demo-the-ask-function, eval = F}
 wind_data <- get_wind_data(site_point, 2020:2024, which_station = "ask")
 ```
 
@@ -119,7 +119,7 @@ This summarized history must include:
 
 The function `summarize_wind_data()` prepares data gathered from the `get_wind_data()` function to be used in WEMo. 
 
-```{r summarize wind, eval = T}
+```{r summarize-wind, eval = T, fig.alt = "Plot showing a Wind Rose"}
 # create a vector from 0 to 350 by 10 to snap the input wind_directions to
 wanted_directions <- seq(from = 0, to = 350, by = 10)
 
@@ -146,7 +146,7 @@ The function will accept `wind_percentile` values from 0 to 1 or `"mean"`. The r
 
 You can save wind data to as a csv file to be used with other analyses.
 
-```{r save wind, eval=FALSE}
+```{r save-wind, eval=FALSE}
 # Check if "data" folder exists, create if not
 if (!dir.exists("data")) {
   dir.create("data")
@@ -166,7 +166,7 @@ There are plenty of sources of bathymetric data and it would be impossible to di
 
 `WEMo` contains a convenience function `get_noaa_cudem()` to fetch bathymetric data from NOAA’s Continuously Updated Digital Elevation Model (CUDEM). This function accesses data from NOAA's Continuously Updated Digital Elevation Model (CUDEM), specifically the 1/9 Arc-Second Resolution (approx. 3 meter) Topobathymetric dataset https://chs.coast.noaa.gov/htdata/raster2/elevation/NCEI_ninth_Topobathy_2014_8483/. This function takes a input point and radius and downloads topo-bathy .tif raster tiles that intersect that radius.
 
-```{r download bathy data}
+```{r download-bathy-data, fig.alt="Map showing bathymetric raster around point of interest"}
 # extract lon and lat from our site_point
 lon = sf::st_coordinates(site_point)[1]
 lat = sf::st_coordinates(site_point)[2]
@@ -213,7 +213,7 @@ With `overwrite = TRUE` all intersecting rasters will be re-downloaded even if t
 
 The raster generated from `get_noaa_cudem()` is un-projected (WGS84). WEMo requires a projected coordinate reference system with units in meters. We'll convert the bathy to a local UTM grid (18N for our site in Sinepuxent Bay, Maryland)
 
-```{r convert bathy to utm, results='hide', warning=FALSE, message=FALSE}
+```{r convert-bathy-to-utm, results='hide', warning=FALSE, message=FALSE}
 # Convert to UTM Zone 18N EPSG:26918
 bathy <- terra::project(
   bathy,
@@ -228,7 +228,7 @@ bathy <- terra::project(
 
 Once you have bathymetry data, use `generate_shoreline_from_bathy()` to generate a shoreline based on a user defined elevation contour. We'll use Mean Sea Level at a nearby NOAA Water Level Station: [Ocean City Inlet, MD (Station ID: 8570283)](https://tidesandcurrents.noaa.gov/datums.html?id=8570283) to draw the shoreline for the analysis.
 
-```{r generate shorelines}
+```{r generate-shorelines, fig.alt="Map showing the shoreline polygon"}
 # MSL at Ocean City Inlet - for the shoreline definition and for use later in the workflow
 water_level <- -0.141 # meters NAVD88 (match the bathy data)
 
@@ -267,7 +267,7 @@ grid_points <- generate_grid_points(
 )
 ```
 
-```{r plot grid points}
+```{r plot grid points, fig.alt="map showing the generated grid of points"}
 # plot the grid with the original site point
 ggplot() + 
   geom_sf(data = grid_points)+
@@ -281,7 +281,7 @@ If `expansion_dist` or `resolution` is a vector of length 2 the x and y expansio
 
 Create a plot with all the inputs together
 
-```{r plot all inputs}
+```{r plot-all-inputs, fig.alt="Map showing all the inputs together"}
 ggplot() +
   geom_spatraster(data = bathy) +
   geom_sf(data = shoreline, fill = "honeydew3") +
@@ -292,7 +292,7 @@ All the inputs align, but it is difficult to see our points and the bathymetry c
 
 We can constrain the input data to fix these problems and make a nice plot:
 
-```{r fancy plot, fig.dim=c(9, 6)}
+```{r fancy-plot, fig.dim=c(9, 6), fig.alt="Fancy plot showing all the inputs together"}
 # Get extent of the grid points
 grid_ext <- terra::ext(grid_points)
 
