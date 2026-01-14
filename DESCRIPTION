@@ -29,7 +29,7 @@ Imports:
     terra,
     tibble,
     tidyterra,
-    worldmet (>= 0.10.2.9100)
+    worldmet (>= 0.10.2.9000)
 Remotes: 
     openair-project/worldmet
 URL: https://github.com/MSE-NCCOS-NOAA/WEMo, https://mse-nccos-noaa.github.io/WEMo/
