@@ -35,9 +35,11 @@ researchers and resource managers.
 
 - **Data Preparation Tools**: Includes convenience functions to download
   and prepare input data, such as historical wind observations from
-  NOAA’s Integrated Surface Database (`get_wind_data()`) and bathymetry
-  from NOAA’s Continuously Updated Digital Elevation Model dataset
-  (`get_noaa_cudem()`).
+  NOAA’s \[Global Historic Climate Network hourly\] dataset
+  (`get_wind_data()`) and bathymetry from NOAA’s \[Continuously Updated
+  Digital Elevation
+  Model\]{<https://www.ncei.noaa.gov/products/coastal-elevation-models>}
+  dataset (`get_noaa_cudem()`).
 
 - **Flexible Inputs**: Works with standard R spatial objects (`sf` and
   `terra`), allowing users to easily integrate their own data.
@@ -186,8 +188,8 @@ ggplot() +
 WEMo provides several functions to help you acquire and prepare the
 necessary input for your area of interest
 
-- **Wind Data**: Download historical wind data from NOAA’s Integrated
-  Surface Database using `get_wind_data()`.
+- **Wind Data**: Download historical wind data from NOAA’s Global
+  Historical Climatology Network hourly (GHCNh) using `get_wind_data()`.
 
 - **Bathymetry Data**: Fetch bathymetric rasters from NOAA’s CUDEM
   dataset using `get_noaa_cudem()`.
