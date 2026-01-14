@@ -37,7 +37,7 @@ jobs:
           needs: website
 
       - name: Install dev worldmet
-        run: remotes::install_github("openair-project/worldmet")
+        run: remotes::install_github("openair-project/worldmet", force = TRUE)
         shell: Rscript {0}
 
       - name: Build site

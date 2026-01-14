@@ -125,16 +125,25 @@ ggplot() +
 
 
 ```{r bathy-path-hidden, incldue = F, fig.alt = "Map showing Bathymetric raster"}
+# 1. Try the standard way (works if package is installed)
 bathy_path <- system.file("extdata", "PI_bathy.tif", package = "WEMo")
 
+# 2. If that fails (GitHub Actions), search the whole project
 if (bathy_path == "" || !file.exists(bathy_path)) {
-  # We search from the project root (top level)
-  # This is more reliable than guessing with "../../"
-  bathy_path <- pkgload::package_file("inst", "extdata", "PI_bathy.tif")
+  # We look for the file starting from two levels up and searching down
+  # 'recursive = TRUE' is the key here.
+  all_files <- list.files(path = "../..", 
+                          pattern = "PI_bathy.tif", 
+                          recursive = TRUE, 
+                          full.names = TRUE)
+  
+  # Filter to make sure we get the one in the inst/ folder, not a copy in docs/
+  bathy_path <- grep("inst/extdata/PI_bathy.tif", all_files, value = TRUE)[1]
 }
 
-if (!file.exists(bathy_path)) {
-   stop("Path check failed. Current working directory is: ", getwd())
+# 3. Final validation
+if (is.na(bathy_path) || !file.exists(bathy_path)) {
+   stop("Could not find PI_bathy.tif. Check if it's been pushed to GitHub.")
 }
 
 PI_bathy <- terra::rast(bathy_path)
