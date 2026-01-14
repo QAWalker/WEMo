@@ -125,12 +125,14 @@ ggplot() +
 
 
 ```{r bathy-path-hidden, echo = FALSE}
-# This chunk is hidden from the user but runs in the background
 bathy_path <- system.file("extdata", "PI_bathy.tif", package = "WEMo")
 
 if (bathy_path == "") {
   # This ensures the build works on GitHub Actions
-  bathy_path <- "../../inst/extdata/PI_bathy.tif"
+  bathy_path <- list.files(path = "../..", pattern = "PI_bathy.tif", recursive = TRUE, full.names = TRUE)
+  
+  # If we found multiple, just take the first one
+  if(length(bathy_path) > 1) bathy_path <- bathy_path[1]
 }
 
 PI_bathy <- terra::rast(bathy_path)
