@@ -113,7 +113,7 @@ A suite of example data is included with WEMo. The data are from the area around
 
 This raster should cover the full extent of the area that you might expect to be reached by fetch rays from your site. 
 
-```{r read-bathy-data-for-show, eval = FALSE, fig.alt="Map showing the bathy raster"}
+```{r read-bathy-data-for-show, eval = FALSE}
 # load bathymetry
 PI_bathy <- terra::rast(x = system.file("extdata", "PI_bathy.tif", package = "WEMo"))
 
@@ -131,6 +131,10 @@ if (bathy_path == "" || !file.exists(bathy_path)) {
   # We search from the project root (top level)
   # This is more reliable than guessing with "../../"
   bathy_path <- pkgload::package_file("inst", "extdata", "PI_bathy.tif")
+}
+
+if (!file.exists(bathy_path)) {
+   stop("Path check failed. Current working directory is: ", getwd())
 }
 
 PI_bathy <- terra::rast(bathy_path)
