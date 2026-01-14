@@ -23,12 +23,13 @@ Imports:
     leaflet,
     lubridate,
     magrittr,
+    remotes,
     rlang,
     sf,
     terra,
     tibble,
     tidyterra,
-    worldmet (>= 0.10.2.9000)
+    worldmet (>= 0.10.2.9100)
 Remotes: 
     openair-project/worldmet
 URL: https://github.com/MSE-NCCOS-NOAA/WEMo, https://mse-nccos-noaa.github.io/WEMo/
