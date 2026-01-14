@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # Overview
 
-Before running WEMo simulations, you must gather the necessary spatial and environmental input data. This vignette introduces the WEMo functions used to:
+Before running WEMo simulations, you must gather the necessary spatial and environmental input data. This article introduces the WEMo functions used to:
 
 * Download and clean wind history data
 * Download bathymetry data
