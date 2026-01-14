@@ -24,7 +24,7 @@ Before running WEMo simulations, you must gather the necessary spatial and envir
 
 Many of the functions here allow users to easily find, download and use publicly available data, but these should not be viewed as the only source that users can or should use to run the model. There are many other sources of public data that may be better suited for your question or perhaps collecting your own data may be the best. WEMo is flexible to use whatever data you'd like.
 
-I'll focus here on data created within this WEMo environment but, spatial data like shapefiles and geotifs can be easily read with R using packages [`sf`](https://r-spatial.github.io/sf/) (for simple features i.e. shapefiles) and [`terra`](https://rspatial.github.io/terra/) (for rasters and shapefiles). Both packages are well developed and plenty of help is available online.
+This article will focus on acquiring data using the tools in the WEMo package, but WEMo can also be run on data from other sources. Spatial data like shapefiles and geotifs can be easily read with R using packages [`sf`](https://r-spatial.github.io/sf/) (for simple features i.e. shapefiles) and [`terra`](https://rspatial.github.io/terra/) (for rasters and shapefiles). Both packages are well developed and plenty of help is available online.
 
 # Gather input data
 
